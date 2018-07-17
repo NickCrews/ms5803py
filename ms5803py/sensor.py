@@ -2,31 +2,36 @@
 import smbus
 import time
 
-DEFAULT_SENSOR_ADDR = 0x76 #(188)
-
-# found from MS5803 datasheet (http://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Data+Sheet%7FMS5803-14BA%7FB3%7Fpdf%7FEnglish%7FENG_DS_MS5803-14BA_B3.pdf%7FCAT-BLPS0013)
-RESET_CMD                           = 0x1E
-READ_PRESS_SENSITIVITY_CMD          = 0xA2
-READ_PRESS_OFFSET_CMD               = 0xA4
-READ_TEMP_COEFF_OF_PRESS_SENS_CMD   = 0xA6
-READ_TEMP_COEFF_OF_PRESS_OFFSET_CMD = 0xA8
-READ_REF_TEMP_CMD                   = 0xAA
-READ_TEMP_COEFF_OF_TEMP_CMD         = 0xAC
-
-READ_CMD                            = 0x00
-SELECT_PRESSURE_CMD                 = 0x40
-SELECT_TEMP_CMD                     = 0x50
-
 
 class Sensor(object):
 
-    def __init__(self, address=DEFAULT_SENSOR_ADDR):
+    DEFAULT_SENSOR_ADDR = 0x76 #(188)
+
+    # found from MS5803 datasheet (http://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Data+Sheet%7FMS5803-14BA%7FB3%7Fpdf%7FEnglish%7FENG_DS_MS5803-14BA_B3.pdf%7FCAT-BLPS0013)
+    RESET_CMD                           = 0x1E
+    READ_PRESS_SENSITIVITY_CMD          = 0xA2
+    READ_PRESS_OFFSET_CMD               = 0xA4
+    READ_TEMP_COEFF_OF_PRESS_SENS_CMD   = 0xA6
+    READ_TEMP_COEFF_OF_PRESS_OFFSET_CMD = 0xA8
+    READ_REF_TEMP_CMD                   = 0xAA
+    READ_TEMP_COEFF_OF_TEMP_CMD         = 0xAC
+
+    READ_ADC_CMD                        = 0x00
+    SELECT_PRESSURE_CMD                 = 0x40
+    SELECT_TEMP_CMD                     = 0x50
+
+    SLEEP_TIME = .005
+
+    def __init__(self, address=None):
+        if address is None:
+            address = Sensor.DEFAULT_SENSOR_ADDR
         self.bus = smbus.SMBus(1)
         self.address = address
-        self.bus.write_byte(self.address, RESET_CMD)
+        self.bus.write_byte(self.address, Sensor.RESET_CMD)
+        time.sleep(Sensor.SLEEP_TIME)
         self._coeffs = self._read_calibration_coeffs()
 
-    def read(self):
+    def read(self, units='celsius'):
         '''
         return (pressure, temperature) in millibars and degrees celsius.
 
@@ -35,15 +40,17 @@ class Sensor(object):
 
         '''
         # read the raw pressure
-        bus.write_byte(SENSOR_ADDR, SELECT_PRESSURE_CMD)
-        time.sleep(.5) #wait for ADC conversion
-        value = bus.read_i2c_block_data(SENSOR_ADDR, READ_PRESS_CMD, 3)
+        self.bus.write_byte(self.address, Sensor.SELECT_PRESSURE_CMD)
+        time.sleep(Sensor.SLEEP_TIME) #wait for ADC conversion
+        value = self.bus.read_i2c_block_data(self.address, Sensor.READ_ADC_CMD, 3)
         D1 = value[0] * 65536 + value[1] * 256 + value[2]
+        
+        time.sleep(Sensor.SLEEP_TIME) #wait for command to go
 
         # read the raw temp
-        bus.write_byte(SENSOR_ADDR, SELECT_TEMP_CMD)
-        time.sleep(.5) #wait for ADC conversion
-        value = bus.read_i2c_block_data(SENSOR_ADDR, READ_PRESS_CMD, 3)
+        self.bus.write_byte(self.address, Sensor.SELECT_TEMP_CMD)
+        time.sleep(Sensor.SLEEP_TIME) #wait for ADC conversion
+        value = self.bus.read_i2c_block_data(self.address, Sensor.READ_ADC_CMD, 3)
         D2 = value[0] * 65536 + value[1] * 256 + value[2]
 
         # perform conversion
@@ -73,32 +80,34 @@ class Sensor(object):
         SENS = SENS - SENS2
         pressure = ((((D1 * SENS) / 2097152) - OFF) / 32768.0) / 100.0
         temp = TEMP / 100.0
+        if units in ['fahrenheit', 'Fahrenheit', 'F', 'f']:
+            temp = (temp * 9/5) + 32
         return pressure, temp
 
     def _read_calibration_coeffs(self):
         # Read 12 bytes of calibration data
         # Read pressure sensitivity
-        data = bus.read_i2c_block_data(SENSOR_ADDR, READ_PRESS_SENSITIVITY_CMD, 2)
+        data = self.bus.read_i2c_block_data(self.address, Sensor.READ_PRESS_SENSITIVITY_CMD, 2)
         C1 = data[0] * 256 + data[1]
 
         # Read pressure offset
-        data = bus.read_i2c_block_data(SENSOR_ADDR, READ_PRESS_OFFSET_CMD, 2)
+        data = self.bus.read_i2c_block_data(self.address, Sensor.READ_PRESS_OFFSET_CMD, 2)
         C2 = data[0] * 256 + data[1]
 
         # Read temperature coefficient of pressure sensitivity
-        data = bus.read_i2c_block_data(SENSOR_ADDR, READ_TEMP_COEFF_OF_PRESS_SENS_CMD, 2)
+        data = self.bus.read_i2c_block_data(self.address, Sensor.READ_TEMP_COEFF_OF_PRESS_SENS_CMD, 2)
         C3 = data[0] * 256 + data[1]
 
         # Read temperature coefficient of pressure offset
-        data = bus.read_i2c_block_data(SENSOR_ADDR, READ_TEMP_COEFF_OF_PRESS_OFFSET_CMD, 2)
+        data = self.bus.read_i2c_block_data(self.address, Sensor.READ_TEMP_COEFF_OF_PRESS_OFFSET_CMD, 2)
         C4 = data[0] * 256 + data[1]
 
         # Read reference temperature
-        data = bus.read_i2c_block_data(SENSOR_ADDR, READ_REF_TEMP_CMD, 2)
+        data = self.bus.read_i2c_block_data(self.address, Sensor.READ_REF_TEMP_CMD, 2)
         C5 = data[0] * 256 + data[1]
 
         # Read temperature coefficient of the temperature
-        data = bus.read_i2c_block_data(SENSOR_ADDR, READ_TEMP_COEFF_OF_TEMP_CMD, 2)
+        data = self.bus.read_i2c_block_data(self.address, Sensor.READ_TEMP_COEFF_OF_TEMP_CMD, 2)
         C6 = data[0] * 256 + data[1]
 
         return C1, C2, C3, C4, C5, C6
