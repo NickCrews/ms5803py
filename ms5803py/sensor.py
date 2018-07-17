@@ -5,7 +5,7 @@ import time
 
 class Sensor(object):
 
-    DEFAULT_SENSOR_ADDR = 0x76 #(188)
+    DEFAULT_SENSOR_ADDR = 0x76
 
     # found from MS5803 datasheet (http://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Data+Sheet%7FMS5803-14BA%7FB3%7Fpdf%7FEnglish%7FENG_DS_MS5803-14BA_B3.pdf%7FCAT-BLPS0013)
     RESET_CMD                           = 0x1E
@@ -44,7 +44,7 @@ class Sensor(object):
         time.sleep(Sensor.SLEEP_TIME) #wait for ADC conversion
         value = self.bus.read_i2c_block_data(self.address, Sensor.READ_ADC_CMD, 3)
         D1 = value[0] * 65536 + value[1] * 256 + value[2]
-        
+
         time.sleep(Sensor.SLEEP_TIME) #wait for command to go
 
         # read the raw temp
