@@ -1,4 +1,4 @@
-[![MS5803-14BA](MS5803-14BA_I2CS.png)](https://www.controleverything.com/content/Analog-Digital-Converters?sku=MS5803-14BA_I2CS)
+[![MS5803-14BA](ms5803.jpg)](https://www.sparkfun.com/products/12909)
 
 # ms5803py
 Python 3 library for MS5803-14BA pressure sensor for Raspberry Pi
