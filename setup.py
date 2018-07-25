@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='ms5803py',
-      version='0.1',
+      version='0.1.2',
       description='Python library for MS5803-14BA pressure sensor for Raspberry Pi',
       url='https://github.com/NickCrews/ms5803py',
       author='Nick Crews',
