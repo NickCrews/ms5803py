@@ -1,7 +1,5 @@
-
 import smbus
 import time
-
 
 class Sensor(object):
 
