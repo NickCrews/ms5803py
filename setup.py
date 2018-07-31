@@ -21,12 +21,12 @@ setup(name='ms5803py',
       keywords = [],
       classifiers = [
         'Programming Language :: Python :: 3',
-        'Topic :: Scientific/Engineering,
+        'Topic :: Scientific/Engineering',
+        'Topic :: Utilities',
         'Intended Audience :: Developers',
         'Intended Audience :: Education',
         'Intended Audience :: End Users/Desktop',
         'Intended Audience :: Science/Research',
-        'Operating System :: MacOS',
-        'Operating System :: Unix',
-        'Topic :: Utilities'
+        "Operating System :: OS Independent"
+        "License :: OSI Approved :: MIT License",
         ])
