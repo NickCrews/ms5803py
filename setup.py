@@ -27,6 +27,6 @@ setup(name='ms5803py',
         'Intended Audience :: Education',
         'Intended Audience :: End Users/Desktop',
         'Intended Audience :: Science/Research',
-        "Operating System :: OS Independent"
+        "Operating System :: OS Independent",
         "License :: OSI Approved :: MIT License",
         ])
