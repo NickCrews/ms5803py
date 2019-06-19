@@ -76,7 +76,7 @@ class Sensor(object):
         TEMP = TEMP - T2
         OFF = OFF - OFF2
         SENS = SENS - SENS2
-        pressure = ((((D1 * SENS) / 2097152) - OFF) / 32768.0) / 100.0
+        pressure = ((((D1 * SENS) / 2097152) - OFF) / 32768.0) / 10.0
         temp = TEMP / 100.0
         if units in ['fahrenheit', 'Fahrenheit', 'F', 'f']:
             temp = (temp * 9/5) + 32
