@@ -20,9 +20,7 @@ class Sensor(object):
 
     SLEEP_TIME = .005
 
-    def __init__(self, address=None):
-        if address is None:
-            address = Sensor.DEFAULT_SENSOR_ADDR
+    def __init__(self, address=Sensor.DEFAULT_SENSOR_ADDR):
         self.bus = smbus.SMBus(1)
         self.address = address
         self.bus.write_byte(self.address, Sensor.RESET_CMD)
