@@ -1,1 +1,1 @@
-from .sensor import *
+from .ms5803 import *

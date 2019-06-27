@@ -7,8 +7,8 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(name='ms5803py',
-      version='0.1.5',
-      description='Python library for MS5803-14BA pressure sensor for Raspberry Pi',
+      version='1.0.0',
+      description='Python library for MS5803-14BA pressure sensor for Raspberry Pi over i2c',
       long_description=long_description,
       long_description_content_type='text/markdown',
       copyright = 'Copyright (c) 2018 Nick Crews',
