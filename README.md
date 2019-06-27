@@ -48,3 +48,19 @@ while True:
         print("advanced pressure={} mBar, temperature={} C".format(press, temp))
     time.sleep(1)
 ```
+results in:
+```
+quick'n'easy pressure=835.7 mBar, temperature=26.64 C
+advanced pressure=835.3 mBar, temperature=26.64 C
+advanced pressure=834.2 mBar, temperature=26.64 C
+advanced pressure=835.3 mBar, temperature=26.64 C
+advanced pressure=834.2 mBar, temperature=26.64 C
+advanced pressure=834.2 mBar, temperature=26.64 C
+quick'n'easy pressure=835.1 mBar, temperature=26.65 C
+advanced pressure=835.3 mBar, temperature=26.63 C
+advanced pressure=837.7 mBar, temperature=26.63 C
+advanced pressure=834.2 mBar, temperature=26.63 C
+advanced pressure=831.8 mBar, temperature=26.63 C
+advanced pressure=835.3 mBar, temperature=26.63 C
+...
+```
