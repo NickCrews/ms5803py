@@ -1,6 +1,9 @@
 [![MS5803-14BA](ms5803.jpg)](https://www.sparkfun.com/products/12909)
 
 # ms5803py
+
+![PyPI - Downloads](https://img.shields.io/pypi/dm/ms5803py)
+
 Python 3 library for MS5803-14BA pressure sensor for Raspberry Pi over i2c.
 
 Based off of the [Adafruit Arduino Library](https://github.com/sparkfun/MS5803-14BA_Breakout) and the [Control Everything Python Library](https://github.com/ControlEverythingCommunity/MS5803-14BA). Some of the math is complicated when correcting raw readings to actual temperatures and pressures, that math can be verified from the [MS5803-14BA datasheet](http://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Data+Sheet%7FMS5803-14BA%7FB3%7Fpdf%7FEnglish%7FENG_DS_MS5803-14BA_B3.pdf%7FCAT-BLPS0013).
