@@ -39,7 +39,7 @@ s = ms5803py.MS5803()
 while True:
     # Do the batteries-included version, optionally specifying an OSR.
     press, temp = s.read(pressure_osr=512)
-    print("quick'n'easy pressure={} mBar, temperature={} C".format(press, temp))
+    print(f"quick'n'easy pressure={press} mBar, temperature={temp} C")
 
     # Use the raw reads for more control, e.g. you need a faster sample
     # rate for pressure than for temperature. Use a high OverSampling Rate (osr)
