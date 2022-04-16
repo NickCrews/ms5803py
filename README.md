@@ -13,11 +13,11 @@ Supports reading the pressure and temperature values from the sensor at any of t
 ## Installation
 Available on PyPi, so you can install on your RPi using
 ````
-pip3 install ms5803py
+python -m pip install ms5803py
 ````
 or clone this repository, CD into that directory, and run
 ```
-pip3 install .
+python -m pip install .
 ```
 
 ## Usage
@@ -30,7 +30,8 @@ sudo i2cdetect -y 1
 It should be either `0X76` or `0x77`, as described in the [MS5803-14BA datasheet](http://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Data+Sheet%7FMS5803-14BA%7FB3%7Fpdf%7FEnglish%7FENG_DS_MS5803-14BA_B3.pdf%7FCAT-BLPS0013), depending on if the CSB (Chip Select) pin on the MS5803 is high or low. On the [Sparkfun breakout board](https://www.sparkfun.com/products/12909) the I2C address is `0x76`, so I have that set as the default if you don't specify an address when initializing the sensor.
 
 See `python3 example.py` for an example of usage:
-```
+
+```python
 import ms5803py
 import time
 
@@ -48,10 +49,12 @@ while True:
     for i in range(5):
         raw_pressure = s.read_raw_pressure(osr=256)
         press, temp = s.convert_raw_readings(raw_pressure, raw_temperature)
-        print("advanced pressure={} mBar, temperature={} C".format(press, temp))
+        print(f"advanced pressure={press} mBar, temperature={temp} C")
     time.sleep(1)
 ```
+
 results in:
+
 ```
 quick'n'easy pressure=835.7 mBar, temperature=26.64 C
 advanced pressure=835.3 mBar, temperature=26.64 C
